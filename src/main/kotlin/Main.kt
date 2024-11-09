@@ -314,7 +314,7 @@ fun wordsToNumber(input: String): String {
         "восемьсот" to NumberFormat.Hundreds(800), "девятьсот" to NumberFormat.Hundreds(900), "тысяча" to NumberFormat.Thousands(1000)
     )
 
-    val cleanInput = input.replace(Regex("[,.!?-]"), "").trim().lowercase()
+    val cleanInput = input.replace(Regex("\\s+"), " ").trim().lowercase()
     val words = cleanInput.split(" ")
     var result = 0
     var current = 0
