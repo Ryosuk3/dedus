@@ -320,44 +320,58 @@ fun wordsToNumber(input: String): String {
     var current = 0
 
     var lastType: KClass<out NumberFormat>? = null
-
+    fun RealType(lastType: KClass<out NumberFormat>?): String{
+        when (lastType?.simpleName) {
+            "Units" -> return "единичного формата"
+            "Tens" -> return "десяткового формата"
+            "Tenss" -> return "формата 10-19"
+            "Hundreds" -> return "сотенного формата"
+            "Thousands" -> return "тысячного формата"
+        }
+        return ""
+    }
     for ((index, word) in words.withIndex()) {
         val numberFormat = numberWords[word] ?: return "Ошибка: слово '$word' не распознано как часть числа."
 
         when (numberFormat) {
             is NumberFormat.Thousands -> {
                 if (lastType != null && lastType != NumberFormat.Hundreds::class) {
-                    return "Ошибка: в слове '$word' по индексу $index, числа тысячного формата не могут следовать после ${lastType.simpleName}."
+                    return "Ошибка: числа тысячного формата не могут идти после чисел ${RealType(lastType)}!"
+                    //return "Ошибка: в слове '$word' по индексу $index, числа тысячного формата не могут следовать после ${lastType.simpleName}."
                 }
                 current *= numberFormat.value
                 result += current
                 current = 0
             }
             is NumberFormat.Hundreds -> {
-                if (lastType == NumberFormat.Tens::class || lastType == NumberFormat.Units::class) {
-                    return "Ошибка: в слове '$word' по индексу $index, числа сотенного формата не могут следовать после ${lastType.simpleName}."
+                if (lastType == NumberFormat.Tens::class || lastType == NumberFormat.Units::class || lastType == NumberFormat.Tenss::class) {
+                    return "Ошибка: числа сотенного формата не могут идти после чисел ${RealType(lastType)}"
+                    //return "Ошибка: в слове '$word' по индексу $index, числа сотенного формата не могут следовать после ${lastType.simpleName}."
                 }
                 current += numberFormat.value
             }
             is NumberFormat.Tens -> {
-                if (lastType == NumberFormat.Units::class) {
-                    return "Ошибка: в слове '$word' по индексу $index, числа десяткового формата не могут следовать после единичного формата (слово '${words[index - 1]}', индекс ${index - 1})."
+                if (lastType == NumberFormat.Units::class || lastType == NumberFormat.Tenss::class) {
+                    return "Ошиьбка: числа десяткового формата не могут идти после чисел ${RealType(lastType)}"
+                    //return "Ошибка: в слове '$word' по индексу $index, числа десяткового формата не могут следовать после единичного формата (слово '${words[index - 1]}', индекс ${index - 1})."
                 }
                 current += numberFormat.value
             }
             is NumberFormat.Tenss -> {
                 if (lastType==NumberFormat.Units::class || lastType == NumberFormat.Tens::class || lastType==NumberFormat.Tenss::class){
-                    return "Ошибка: в слове '$word' по индексу $index, числа сотенного формата не могут следовать после ${lastType.simpleName}."
+                    return "Ошибка: числа формата 10-19 не могут идти после чисел ${RealType(lastType)}"
+                    //return "Ошибка: в слове '$word' по индексу $index, числа сотенного формата не могут следовать после ${lastType.simpleName}."
                 }
                 current+=numberFormat.value
             }
             is NumberFormat.Units -> {
-                if (lastType==NumberFormat.Units::class) {
-                    return "Ошибка: в слове '$word' по индексу $index, числа единичного формата не могут следовать после ${lastType.simpleName} (слово '${words[index - 1]}', индекс ${index - 1})."
+                if (lastType==NumberFormat.Units::class || lastType == NumberFormat.Tenss::class || lastType==NumberFormat.Tens::class) {
+                    return "Ошибка: числа единичного формата не могут идти после чисел ${RealType(lastType)}"
+                    //return "Ошибка: в слове '$word' по индексу $index, числа единичного формата не могут следовать после ${lastType.simpleName} (слово '${words[index - 1]}', индекс ${index - 1})."
                 }
-                else if (lastType==NumberFormat.Tenss::class){
+                /*else if (lastType==NumberFormat.Tenss::class){
                     return "Ошибка: в слове '$word' по индексу $index, числа единичного формата не могут следовать после чисел типа 10-19 (слово '${words[index - 1]}', индекс ${index - 1})."
-                }
+                }*/
                 current += numberFormat.value
             }
         }
