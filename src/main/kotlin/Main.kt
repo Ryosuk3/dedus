@@ -351,8 +351,8 @@ fun wordsToNumber(input: String): String {
                 current += numberFormat.value
             }
             is NumberFormat.Tens -> {
-                if (lastType == NumberFormat.Units::class || lastType == NumberFormat.Tenss::class) {
-                    return "Ошиьбка: числа десяткового формата не могут идти после чисел ${RealType(lastType)}"
+                if (lastType == NumberFormat.Units::class || lastType == NumberFormat.Tenss::class || lastType == NumberFormat.Tens::class) {
+                    return "Ошибка: числа десяткового формата не могут идти после чисел ${RealType(lastType)}"
                     //return "Ошибка: в слове '$word' по индексу $index, числа десяткового формата не могут следовать после единичного формата (слово '${words[index - 1]}', индекс ${index - 1})."
                 }
                 current += numberFormat.value
