@@ -365,7 +365,7 @@ fun wordsToNumber(input: String): String {
                 current+=numberFormat.value
             }
             is NumberFormat.Units -> {
-                if (lastType==NumberFormat.Units::class || lastType == NumberFormat.Tenss::class || lastType==NumberFormat.Tens::class) {
+                if (lastType==NumberFormat.Units::class) {
                     return "Ошибка: числа единичного формата не могут идти после чисел ${RealType(lastType)}"
                     //return "Ошибка: в слове '$word' по индексу $index, числа единичного формата не могут следовать после ${lastType.simpleName} (слово '${words[index - 1]}', индекс ${index - 1})."
                 }
