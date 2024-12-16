@@ -385,7 +385,9 @@ fun wordsToNumber(input: String): String {
 
 
 fun moveWordsToEnd(input: String, startIndex: Int, endIndex: Int): String {
-    val words = input.split(" ").toMutableList()
+    val cleanInput = input.replace(Regex("\\s+"), " ").trim().lowercase()
+    val words = cleanInput.split(" ").toMutableList()
+
 
     if (words.isEmpty()) {
         return "Ошибка: Строка пуста"
